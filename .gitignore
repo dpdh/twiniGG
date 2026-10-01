@@ -1,0 +1,9 @@
+.DS_Store
+.history/
+data/*.sqlite3
+data/*.sqlite3-shm
+data/*.sqlite3-wal
+mobile/android/local.properties
+mobile/build/
+mobile/.dart_tool/
+mobile/.flutter-plugins-dependencies

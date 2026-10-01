@@ -1,0 +1,1527 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Twini Twin City</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="styles.css" />
+    <script type="importmap">
+      {"imports":{"three":"https://unpkg.com/three@0.169.0/build/three.module.js"}}
+    </script>
+  </head>
+  <body>
+    <div id="appSplash" class="app-splash" aria-live="polite" aria-label="Splash screen aplikasi">
+      <div class="splash-backdrop"></div>
+      <div class="splash-grid"></div>
+      <div class="splash-bubble-field" aria-hidden="true">
+        <span class="splash-bubble splash-bubble--one"></span>
+        <span class="splash-bubble splash-bubble--two"></span>
+        <span class="splash-bubble splash-bubble--three"></span>
+        <span class="splash-bubble splash-bubble--four"></span>
+        <span class="splash-bubble splash-bubble--five"></span>
+        <span class="splash-bubble splash-bubble--six"></span>
+        <span class="splash-bubble splash-bubble--seven"></span>
+        <span class="splash-bubble splash-bubble--eight"></span>
+      </div>
+      <div class="splash-content">
+        <div class="splash-logo-wrap">
+          <img src="mobile/assets/images/ITDC_icon.png" alt="Logo aplikasi" class="splash-logo" />
+        </div>
+        <div class="splash-brand">TWINI</div>
+        <p class="splash-tagline">DIGITAL TWIN · SMART CITY · LEARNING</p>
+      </div>
+    </div>
+
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="brand-box">
+          <div class="brand-icon"><img src="mobile/assets/images/ITDC_icon.ico" alt="Twini" /></div>
+          <div>
+            <p class="kicker">TWIN ENGINE</p>
+            <h1>TWINI</h1>
+          </div>
+        </div>
+
+        <nav class="main-nav" aria-label="Main navigation">
+          <button class="nav-button active" data-screen="home">🏠 Beranda</button>
+          <button class="nav-button" data-screen="character">🧩 Karakter</button>
+          <button class="nav-button" data-screen="world">🗺️ Peta Kota</button>
+          <button class="nav-button" data-screen="village">🏘️ Twin Village</button>
+          <button class="nav-button" data-screen="missions">📜 Misi</button>
+          <button class="nav-button" data-screen="bim">🏗️ Puzzle BIM</button>
+          <button class="nav-button" data-screen="clash">⚔️ Pemburu Clash</button>
+          <button class="nav-button" data-screen="scanner">📡 Pemindai</button>
+          <button class="nav-button" data-screen="sensor">📊 Sensor</button>
+          <button class="nav-button" data-screen="emergency">🚨 Tanggap Darurat</button>
+          <button class="nav-button" data-screen="build">🧱 Bangun Kota</button>
+          <button class="nav-button" data-screen="ai">🤖 Misi AI</button>
+          <button class="nav-button" data-screen="inventory">🎒 Inventaris</button>
+          <button class="nav-button" data-screen="crypto">🪙 DT Crypto</button>
+          <button class="nav-button" data-screen="sponsorship">🤝 Sponsorship IDTC</button>
+          <button class="nav-button" data-screen="customization">🎨 Kostumisasi Twini</button>
+          <button class="nav-button" data-screen="achievements">🏅 Prestasi</button>
+          <button class="nav-button" data-screen="leaderboard">📈 Papan Peringkat</button>
+          <button class="nav-button" data-screen="guild">👥 Komunitas</button>
+          <button class="nav-button" data-screen="profile">👤 Profil</button>
+          <button class="nav-button" data-screen="maturity">📡 Kematangan Twin</button>
+          <button class="nav-button" data-screen="citybuilder">🏙️ Pembangun Kota</button>
+          <button class="nav-button" data-screen="settings">⚙️ Pengaturan</button>
+        </nav>
+      </aside>
+
+      <main class="main-panel">
+        <header class="topbar">
+          <button class="menu-toggle" id="menuToggle" type="button" aria-label="Sembunyikan menu utama" aria-expanded="true" title="Sembunyikan menu utama" onclick="toggleMainMenu(this)">☰</button>
+          <div class="player-summary" id="topProfileSummary">
+            <div class="avatar-halo" id="playerSummaryAvatar"><img src="mobile/assets/images/ITDC_icon.ico" alt="Twini" /></div>
+            <div>
+              <p class="mini-label">Pemain</p>
+              <h2 id="playerName">Adit Twin</h2>
+            </div>
+          </div>
+
+          <button class="ribbon-button" data-screen="learn" type="button" aria-label="Buka Belajar Digital Twin" title="Belajar Digital Twin">
+            <span aria-hidden="true">▤</span><span class="ribbon-label">Belajar</span>
+          </button>
+
+          <div class="hud">
+            <div class="hud-pill" data-stat="energy"><span>❤️</span><strong id="energyStat">92</strong></div>
+            <div class="hud-pill" data-stat="xp"><span>⭐</span><strong id="xpStat">12,600</strong></div>
+            <div class="hud-pill" data-stat="coins"><span>💰</span><strong id="coinStat">2,480</strong></div>
+            <div class="hud-pill" data-stat="twinPoints"><span>🔷</span><strong id="twinPointStat">480</strong></div>
+            <div class="hud-pill" data-stat="level"><span>🏆</span><strong id="levelStat">25</strong></div>
+          </div>
+        </header>
+
+        <div class="twini-companion" id="twiniCompanion">
+          <button class="twini-avatar-button" id="twiniAssistantToggle" type="button" aria-label="Buka Asisten AI Twini" aria-expanded="false" aria-controls="twiniGuidePanel" title="Buka Asisten AI Twini">
+            <span class="twini-avatar"><img src="mobile/assets/images/ITDC_icon.ico" alt="" /></span>
+            <span class="twini-assistant-indicator" aria-hidden="true">AI</span>
+          </button>
+          <div class="speech-bubble" id="twiniMessage" role="status" aria-live="polite">Tanya Twini atau buka panduan Digital Twin.</div>
+        </div>
+
+        <aside class="twini-guide-panel" id="twiniGuidePanel" role="dialog" aria-labelledby="twiniGuideTitle" hidden>
+          <div class="twini-guide-header">
+            <div>
+              <p class="eyebrow">TWINI AI · MODE LOKAL</p>
+              <h2 id="twiniGuideTitle">Asisten Twini</h2>
+            </div>
+            <button class="twini-position-reset" id="twiniPositionReset" type="button" aria-label="Kembalikan tombol ke posisi awal" title="Kembalikan tombol ke posisi awal">↘</button>
+            <button class="twini-guide-close" id="twiniGuideClose" type="button" aria-label="Tutup panduan" title="Tutup panduan">×</button>
+          </div>
+          <div class="twini-assistant-tabs" role="tablist" aria-label="Mode Twini">
+            <button class="active" id="twiniAssistantTab" type="button" role="tab" aria-selected="true" aria-controls="twiniAssistantChat" data-twini-mode="assistant">Asisten</button>
+            <button id="twiniGuideTab" type="button" role="tab" aria-selected="false" aria-controls="twiniGuideContent" data-twini-mode="guide">Panduan</button>
+          </div>
+          <section class="twini-assistant-chat" id="twiniAssistantChat" role="tabpanel" aria-labelledby="twiniAssistantTab">
+            <p class="twini-assistant-intro">Tanya soal kota, BIM, misi, atau Digital Twin.</p>
+            <div class="twini-chat-messages" id="twiniChatMessages" role="log" aria-live="polite" aria-relevant="additions text"></div>
+            <div class="twini-quick-prompts" aria-label="Pertanyaan cepat">
+              <button type="button" data-twini-prompt="Bagaimana cara meningkatkan nilai kota?">Nilai kota</button>
+              <button type="button" data-twini-prompt="Bagaimana cara membaca dan menyelesaikan clash BIM?">Clash BIM</button>
+              <button type="button" data-twini-prompt="Bagaimana progress belajar dan KUM saya?">Progress belajar</button>
+            </div>
+            <form class="twini-chat-form" id="twiniAssistantForm">
+              <label class="sr-only" for="twiniAssistantInput">Tulis pertanyaan untuk Twini</label>
+              <input id="twiniAssistantInput" name="question" type="text" maxlength="300" placeholder="Tulis pertanyaan..." autocomplete="off" required />
+              <button type="submit" aria-label="Kirim pertanyaan" title="Kirim pertanyaan">↑</button>
+            </form>
+          </section>
+          <section class="twini-guide-content" id="twiniGuideContent" role="tabpanel" aria-labelledby="twiniGuideTab" hidden>
+            <div class="twini-guide-progress"><span id="twiniGuideProgress"></span></div>
+            <p class="twini-guide-step-count" id="twiniGuideStepCount"></p>
+            <h3 class="twini-guide-step-title" id="twiniGuideStepTitle"></h3>
+            <p class="twini-guide-step-copy" id="twiniGuideStepCopy"></p>
+            <button class="twini-guide-action" id="twiniGuideAction" type="button"></button>
+            <div class="twini-guide-controls">
+              <button id="twiniGuidePrevious" type="button">Sebelumnya</button>
+              <button id="twiniGuideNext" type="button">Berikutnya</button>
+            </div>
+          </section>
+        </aside>
+
+        <section id="screen-home" class="screen">
+          <div class="hero-banner">
+            <div class="hero-copy">
+              <p class="eyebrow">KOTA KEMBAR • KAMPANYE 01</p>
+              <h3>Hidupkan kota, satu misi demi satu.</h3>
+              <p>Setiap aset punya cerita. Periksa model, cari anomali, lalu lihat kotamu tumbuh makin cerdas.</p>
+              <div class="mission-resume">
+                <div class="resume-heading"><span>MISI BERIKUTNYA</span><span id="homeMissionProgress">0/3 langkah</span></div>
+                <strong id="homeCurrentMission">Twin Village • Kenalan dengan Twini</strong>
+                <div class="resume-track"><span id="homeMissionProgressBar"></span></div>
+              </div>
+              <div class="cta-row">
+                <button class="primary-btn" data-go="missions">LANJUTKAN MISI <span aria-hidden="true">↗</span></button>
+                <button class="secondary-btn" data-go="world">JELAJAHI KOTA</button>
+              </div>
+            </div>
+            <div class="hero-visual">
+              <div class="home-bim-frame">
+                <div class="home-bim-heading"><span>LIVE DIGITAL TWIN · UNITY</span><button type="button" id="homeBimReset" aria-label="Reset sudut kamera" title="Reset sudut kamera">↺</button></div>
+                <div class="home-bim-scene" id="homeBimScene" aria-label="Preview Unity Digital Twin tiga dimensi"><div class="home-unity-slot" id="homeUnitySlot"></div></div>
+                <div class="home-bim-footer"><span id="homeBimCaption">UNITY WEBGL · TWIN VILLAGE</span><button type="button" data-go="unity-twin">BUKA DUNIA 3D <span aria-hidden="true">↗</span></button></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="quick-grid">
+            <article class="quick-card accent-blue">
+              <span>🏆</span>
+              <h4>Misi selesai</h4>
+              <p id="completedMissionStat">0 / 18</p>
+            </article>
+            <article class="quick-card accent-green">
+              <span>🌱</span>
+              <h4>Zona terbuka</h4>
+              <p id="unlockedZoneStat">1 / 10</p>
+            </article>
+            <article class="quick-card accent-gold">
+              <span>📡</span>
+              <h4>Kematangan Twin</h4>
+              <p id="twinMaturityStat">Level 5</p>
+            </article>
+            <article class="quick-card accent-orange">
+              <span>⚡</span>
+              <h4>Streak harian</h4>
+              <p id="dailyStreakStat">3 hari</p>
+            </article>
+          </div>
+
+          <section class="arena-hud" aria-label="City Arena status">
+            <div class="arena-player-card">
+              <div class="arena-avatar-ring" id="arenaAvatar"><img src="mobile/assets/images/ITDC_icon.ico" alt="Avatar Adit Twin" /></div>
+              <div>
+                <p class="arena-kicker">CITY ARENA // RANKED</p>
+                <h3 id="arenaPlayerName">Adit Twin</h3>
+                <span class="arena-role"><i></i> <span id="arenaPlayerRole">SMART ASSET ENGINEER</span></span>
+                <button class="profile-edit-btn" type="button" data-go="character">Atur karakter <span aria-hidden="true">↗</span></button>
+              </div>
+              <div class="arena-rank"><span>RANK</span><strong>MYTHIC</strong><small>1,842 RP</small></div>
+            </div>
+
+            <div class="arena-objective">
+              <div class="arena-objective-head"><span>OBJECTIVE AKTIF</span><b>LIVE</b></div>
+              <h3>Amankan Twin Village</h3>
+              <p>Scan anomali dan pulihkan aliran data sebelum alarm kota naik.</p>
+              <div class="arena-progress"><span id="arenaObjectiveProgress"></span></div>
+              <div class="arena-objective-meta"><span><strong id="arenaObjectivePercent">40%</strong> terkoneksi</span><span>07:42 tersisa</span></div>
+            </div>
+
+            <div class="arena-skills">
+              <p class="arena-kicker">QUICK LOADOUT</p>
+              <div class="skill-row">
+                <button class="skill-button skill-bim" data-go="bim" title="Buka Puzzle BIM"><span>⌬</span><small>BIM</small></button>
+                <button class="skill-button skill-sensor" data-go="sensor" title="Buka Sensor"><span>◈</span><small>SENSOR</small></button>
+                <button class="skill-button skill-mission" data-go="missions" title="Buka Misi"><span>✦</span><small>MISSION</small></button>
+              </div>
+              <span class="skill-hint">Pilih ability untuk lanjut</span>
+            </div>
+          </section>
+
+          <div class="panel-grid two-up">
+            <div class="panel-card">
+              <div class="panel-title-row">
+                <h3>Misi Harian</h3>
+                <span class="badge soft">Aktif</span>
+              </div>
+              <ul class="task-list" id="dailyOpsList"></ul>
+            </div>
+
+            <div class="panel-card">
+              <div class="panel-title-row">
+                <h3>Twini Story</h3>
+                <span class="badge soft purple">Alert</span>
+              </div>
+              <div class="dialogue-box">
+                <p>“Halo! 👋 Aku Twini! Twin City kita masih kosong… bantu aku membangunnya?”</p>
+                <p>“Mission pertama kita… MEMBANGUN DIGITAL TWIN!”</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel-card city-pulse-panel">
+            <div class="panel-title-row">
+              <div>
+                <p class="eyebrow">LIVE CITY FEED</p>
+                <h3>City Pulse</h3>
+              </div>
+              <span class="pulse-live"><span></span> LIVE</span>
+            </div>
+            <div id="cityPulseEvent" class="city-pulse-event"></div>
+          </div>
+        </section>
+
+        <section id="screen-learn" class="screen">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">TWINI LEARNING RIBBON</p>
+              <h3>Belajar Digital Twin</h3>
+            </div>
+            <span class="badge soft" id="learningProgress">0 / 3 selesai</span>
+          </div>
+          <div class="learning-intro panel-card">
+            <div>
+              <p class="eyebrow">JALUR DASAR</p>
+              <h3>Dari model menjadi kota yang memahami dirinya.</h3>
+              <p>Digital Twin menghubungkan model aset, data kondisi aktual, dan analisis agar keputusan kota bisa diuji sebelum diterapkan.</p>
+            </div>
+            <div class="learning-progress-summary">
+              <div class="learning-progress-metrics">
+                <div><span>SUBBAB</span><strong id="learningSubchapterProgress">0 / 8</strong></div>
+                <div><span>KUM BELAJAR</span><strong id="learningKumValue">0</strong></div>
+              </div>
+              <div class="learning-progress-track" aria-label="Progres modul belajar"><span id="learningProgressBar"></span></div>
+              <div class="learning-subchapter-track" aria-label="Progres subbab"><span id="learningSubchapterProgressBar"></span></div>
+            </div>
+          </div>
+          <div class="learning-grid" id="learningModules"></div>
+          <section class="learning-leaderboard-panel panel-card" aria-labelledby="learningLeaderboardTitle">
+            <div class="panel-title-row">
+              <div>
+                <p class="eyebrow">PETUALANGAN DIGITAL TWIN</p>
+                <h3 id="learningLeaderboardTitle">Leaderboard Pembelajar</h3>
+              </div>
+              <span class="badge soft">TOP 5</span>
+            </div>
+            <p class="learning-board-note">Papan lokal demo. Skor dihitung dari materi selesai, misi petualangan, dan XP.</p>
+            <div class="learning-player-standing" id="learningPlayerStanding"></div>
+            <div class="learning-leaderboard-list" id="learningLeaderboard"></div>
+            <div class="learning-badge-shelf">
+              <h4>Lencana yang diraih</h4>
+              <div id="learningBadgeShelf" class="learning-badge-list"></div>
+            </div>
+          </section>
+        </section>
+
+        <section id="screen-learn-model" class="screen">
+          <div class="section-head learning-lesson-topbar">
+            <div>
+              <p class="eyebrow">MODUL 01 · BIM FUNDAMENTALS</p>
+              <h3>Bangun model digital</h3>
+            </div>
+            <button class="secondary-btn" type="button" data-go="learn">Kembali ke jalur belajar</button>
+          </div>
+          <div class="learning-lesson-lead">
+            <span class="learning-lesson-mark" aria-hidden="true">01</span>
+            <div>
+              <p class="eyebrow">DARI OBJEK FISIK KE REPRESENTASI DIGITAL</p>
+              <p>Model BIM bukan hanya bentuk 3D. Setiap objek perlu geometri yang tepat, konteks ruang, properti material, dan identitas yang konsisten agar dapat dipakai sebagai dasar Digital Twin.</p>
+            </div>
+          </div>
+          <section class="learning-lesson-section" aria-labelledby="modelComponentsTitle">
+            <div class="learning-lesson-section-heading">
+              <p class="eyebrow">STRUKTUR MODEL</p>
+              <h4 id="modelComponentsTitle">Empat komponen sebuah objek BIM</h4>
+            </div>
+            <div class="model-component-grid">
+              <article class="model-component-item">
+                <span>01 / GEOMETRI</span>
+                <h5>Bentuk dan dimensi</h5>
+                <p>Representasikan bentuk, ukuran, orientasi, dan posisi objek secukupnya untuk koordinasi serta analisis.</p>
+              </article>
+              <article class="model-component-item">
+                <span>02 / RUANG</span>
+                <h5>Lokasi dalam aset</h5>
+                <p>Hubungkan objek ke site, gedung, lantai, ruang, zona, atau sistem agar konteks lokasinya jelas.</p>
+              </article>
+              <article class="model-component-item">
+                <span>03 / MATERIAL</span>
+                <h5>Properti fisik</h5>
+                <p>Catat material dan atribut relevan, misalnya kelas, kapasitas, rating, produsen, atau kebutuhan pemeliharaan.</p>
+              </article>
+              <article class="model-component-item">
+                <span>04 / IDENTITAS</span>
+                <h5>Data yang dapat ditautkan</h5>
+                <p>Gunakan ID unik, nama, klasifikasi, dan referensi aset agar data sensor serta riwayat inspeksi menuju objek yang tepat.</p>
+              </article>
+            </div>
+          </section>
+          <section class="learning-lesson-section" aria-labelledby="modelHierarchyTitle">
+            <div class="learning-lesson-section-heading">
+              <p class="eyebrow">CONTOH DATA</p>
+              <h4 id="modelHierarchyTitle">Dari gedung ke aset</h4>
+            </div>
+            <div class="model-hierarchy-table-wrap">
+              <table class="model-hierarchy-table">
+                <thead><tr><th>Tingkat</th><th>Contoh</th><th>Informasi kunci</th></tr></thead>
+                <tbody>
+                  <tr><td>Gedung</td><td>Rumah Sakit Kota</td><td>Kode gedung dan alamat</td></tr>
+                  <tr><td>Lantai / ruang</td><td>Lantai 2 · Ruang AHU</td><td>Kode ruang dan zona layanan</td></tr>
+                  <tr><td>Sistem</td><td>HVAC</td><td>Nama sistem dan relasi peralatan</td></tr>
+                  <tr><td>Aset</td><td>Pompa CHW-P-02</td><td>ID unik, tipe, lokasi, spesifikasi, dan status</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="learning-lesson-note">Nama parameter dan format pertukaran data mengikuti standar serta kebutuhan pemilik aset. Pastikan satu ID aset dipakai konsisten di model, sistem pemeliharaan, dan integrasi sensor.</p>
+          </section>
+          <section class="learning-lesson-section" aria-labelledby="bimTwinTitle">
+            <div class="learning-lesson-section-heading">
+              <p class="eyebrow">BIM + DIGITAL TWIN</p>
+              <h4 id="bimTwinTitle">Dari model informasi menjadi cermin operasional</h4>
+            </div>
+            <div class="model-component-grid">
+              <article class="model-component-item">
+                <span>01 / BIM</span>
+                <h5>Bangun konteks aset</h5>
+                <p>BIM menyatukan geometri, spesifikasi, relasi, dan dokumen aset untuk perencanaan, konstruksi, serah terima, serta pengelolaan fasilitas.</p>
+              </article>
+              <article class="model-component-item">
+                <span>02 / TERHUBUNG</span>
+                <h5>Tambahkan data kondisi</h5>
+                <p>Digital Twin menghubungkan model dengan sensor, sistem pemeliharaan, jadwal, cuaca, dan sumber data lain yang memiliki waktu serta asal yang jelas.</p>
+              </article>
+              <article class="model-component-item">
+                <span>03 / DINAMIS</span>
+                <h5>Bandingkan dengan kondisi normal</h5>
+                <p>Data aktual dibandingkan dengan batas operasi, riwayat, dan pola normal untuk menemukan anomali, penurunan kinerja, atau kebutuhan inspeksi.</p>
+              </article>
+              <article class="model-component-item">
+                <span>04 / KEPUTUSAN</span>
+                <h5>Uji skenario sebelum bertindak</h5>
+                <p>Tim dapat memperkirakan dampak perubahan setelan, jadwal perawatan, atau penggantian komponen sebelum keputusan diterapkan pada aset nyata.</p>
+              </article>
+            </div>
+          </section>
+          <section class="learning-lesson-section" aria-labelledby="modelWorkflowTitle">
+            <div class="learning-lesson-section-heading">
+              <p class="eyebrow">ALUR KERJA</p>
+              <h4 id="modelWorkflowTitle">Lima langkah menjaga Digital Twin tetap berguna</h4>
+            </div>
+            <div class="model-hierarchy-table-wrap">
+              <table class="model-hierarchy-table">
+                <thead><tr><th>Langkah</th><th>Yang dilakukan</th><th>Hasil</th></tr></thead>
+                <tbody>
+                  <tr><td>1. Rencanakan</td><td>Tentukan tujuan, pengguna, aset kritis, dan keputusan yang ingin didukung.</td><td>Kebutuhan informasi yang terukur</td></tr>
+                  <tr><td>2. Modelkan</td><td>Susun objek BIM, struktur lokasi, ID unik, properti, dan relasi antar sistem.</td><td>Model aset yang dapat ditelusuri</td></tr>
+                  <tr><td>3. Integrasikan</td><td>Petakan ID aset ke sensor, inspeksi, work order, dan sumber data lain.</td><td>Data masuk ke objek yang tepat</td></tr>
+                  <tr><td>4. Validasi</td><td>Periksa kelengkapan, satuan, waktu, kualitas, dan kesesuaian data dengan kondisi lapangan.</td><td>Informasi yang dapat dipercaya</td></tr>
+                  <tr><td>5. Tindak lanjuti</td><td>Gunakan insight untuk prioritas kerja, ukur hasilnya, lalu perbarui model dan aturan.</td><td>Perbaikan berulang berbasis bukti</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="learning-lesson-note"><strong>Intinya:</strong> BIM adalah fondasi informasi dan konteks aset, sedangkan Digital Twin menambahkan hubungan dengan kondisi nyata, waktu, analisis, dan umpan balik keputusan. Model 3D tanpa data yang terawat belum menjadi Digital Twin.</p>
+          </section>
+          <form class="model-lesson-quiz" data-learning-quiz="model" data-answer-name="modelLessonAnswer" data-correct-answer="identity" data-correct-feedback="Benar. ID unik dan lokasi yang konsisten membantu data sensor terhubung ke aset yang tepat." data-incorrect-feedback="Belum tepat. Cari jawaban yang menghubungkan data ke identitas serta lokasi aset.">
+            <div>
+              <p class="eyebrow">SESI PRETEST MATERI</p>
+              <h4>Apa yang paling membantu menghubungkan objek BIM dengan data sensor?</h4>
+            </div>
+            <label><input type="radio" name="modelLessonAnswer" value="geometry" required /><span>Geometri 3D yang detail saja</span></label>
+            <label><input type="radio" name="modelLessonAnswer" value="identity" /><span>ID aset unik dan lokasi yang konsisten</span></label>
+            <label><input type="radio" name="modelLessonAnswer" value="color" /><span>Warna objek yang seragam</span></label>
+            <button class="primary-btn" type="submit">Periksa jawaban</button>
+            <p class="model-lesson-quiz-status" id="modelLessonQuizStatus" role="status" aria-live="polite"></p>
+          </form>
+          <div class="learning-lesson-footer">
+            <label class="learning-checklist"><input type="checkbox" data-learning-complete="model" /><span>Saya selesai mempelajari modul ini</span></label>
+            <p class="model-lesson-progress-status" data-learning-progress="model" role="status" aria-live="polite"></p>
+          </div>
+        </section>
+
+        <section id="screen-learn-live-data" class="screen">
+          <div class="section-head learning-lesson-topbar">
+            <div>
+              <p class="eyebrow">MODUL 02 · DATA SENSOR</p>
+              <h3>Hubungkan data aktual</h3>
+            </div>
+            <button class="secondary-btn" type="button" data-go="learn">Kembali ke jalur belajar</button>
+          </div>
+          <div class="learning-lesson-lead">
+            <span class="learning-lesson-mark" aria-hidden="true">02</span>
+            <div>
+              <p class="eyebrow">KONDISI NYATA, TERHUBUNG KE ASET</p>
+              <p>Data sensor membuat Digital Twin mencerminkan kondisi aset saat ini. Setiap pembacaan harus melewati rantai pengiriman yang jelas: sensor mengukur, gateway meneruskan, platform memvalidasi, lalu model aset menampilkan kondisi terbaru untuk dianalisis.</p>
+            </div>
+          </div>
+          <section class="learning-lesson-section" aria-labelledby="liveDataLessonTitle">
+            <div class="learning-lesson-section-heading">
+              <p class="eyebrow">ALUR DATA</p>
+              <h4 id="liveDataLessonTitle">Dari sensor menjadi kondisi aset</h4>
+            </div>
+            <div class="model-component-grid">
+              <article class="model-component-item"><span>01 / UKUR</span><h5>Ambil pembacaan</h5><p>Sensor mengukur suhu, getaran, tekanan, energi, atau aliran secara berkala.</p></article>
+              <article class="model-component-item"><span>02 / TAUTKAN</span><h5>Kenali asetnya</h5><p>Gunakan ID aset yang konsisten agar data masuk ke pompa, ruang, atau sistem yang benar.</p></article>
+              <article class="model-component-item"><span>03 / KONTEKSKAN</span><h5>Sertakan waktu dan satuan</h5><p>Waktu pengukuran, satuan, dan lokasi membantu membandingkan data secara akurat.</p></article>
+              <article class="model-component-item"><span>04 / PANTAU</span><h5>Amati perubahannya</h5><p>Bandingkan pembacaan dengan kondisi normal untuk mengenali perubahan yang perlu diperiksa.</p></article>
+            </div>
+          </section>
+          <section class="learning-lesson-section" aria-labelledby="sensorPipelineTitle">
+            <div class="learning-lesson-section-heading">
+              <p class="eyebrow">RANTAI PENGIRIMAN</p>
+              <h4 id="sensorPipelineTitle">Dari pembacaan sensor ke Digital Twin</h4>
+            </div>
+            <div class="model-component-grid">
+              <article class="model-component-item"><span>01 / PERANGKAT</span><h5>Sensor menangkap sinyal</h5><p>Sensor mengubah kondisi fisik seperti suhu, tekanan, arus, kelembapan, posisi, atau getaran menjadi nilai terukur pada interval tertentu.</p></article>
+              <article class="model-component-item"><span>02 / GATEWAY</span><h5>Data dikumpulkan dan diteruskan</h5><p>Gateway dapat menyaring, memberi cap waktu, menyimpan sementara, dan mengirimkan data melalui protokol jaringan yang sesuai saat koneksi tersedia.</p></article>
+              <article class="model-component-item"><span>03 / PLATFORM</span><h5>Pesan dinormalisasi</h5><p>Platform memeriksa format, satuan, rentang nilai, duplikasi, kualitas koneksi, dan keamanan sebelum data diterima sebagai telemetri yang sah.</p></article>
+              <article class="model-component-item"><span>04 / DIGITAL TWIN</span><h5>Kondisi aset diperbarui</h5><p>Nilai yang valid dipetakan ke ID aset di BIM, disimpan bersama riwayat waktunya, lalu digunakan untuk dashboard, alarm, analitik, dan keputusan perawatan.</p></article>
+            </div>
+          </section>
+          <section class="learning-lesson-section" aria-labelledby="sensorDataContractTitle">
+            <div class="learning-lesson-section-heading">
+              <p class="eyebrow">KONTRAK DATA</p>
+              <h4 id="sensorDataContractTitle">Informasi minimum dalam satu pesan sensor</h4>
+            </div>
+            <div class="model-hierarchy-table-wrap">
+              <table class="model-hierarchy-table">
+                <thead><tr><th>Elemen</th><th>Contoh</th><th>Mengapa penting</th></tr></thead>
+                <tbody>
+                  <tr><td>ID aset</td><td>CHW-P-02</td><td>Menentukan objek BIM dan peralatan yang mengirimkan data.</td></tr>
+                  <tr><td>Jenis pengukuran</td><td>pressure</td><td>Menjelaskan arti nilai, bukan hanya angka tanpa konteks.</td></tr>
+                  <tr><td>Nilai dan satuan</td><td>3.2 bar</td><td>Memungkinkan perbandingan yang benar dengan batas operasi.</td></tr>
+                  <tr><td>Waktu dan zona</td><td>2026-09-30 10:15 UTC</td><td>Menempatkan kondisi pada urutan kejadian yang tepat.</td></tr>
+                  <tr><td>Kualitas dan sumber</td><td>good · sensor-17</td><td>Membantu membedakan data tepercaya, terlambat, hilang, atau perlu diperiksa.</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="learning-lesson-note"><strong>Perhatikan:</strong> nilai sensor tidak otomatis menjadi informasi yang berguna. Digital Twin membutuhkan identitas aset, waktu, satuan, kualitas, dan riwayat agar angka dapat dibaca sebagai kondisi, dibandingkan dengan ambang batas, lalu ditindaklanjuti.</p>
+          </section>
+          <form class="model-lesson-quiz" data-learning-quiz="live-data" data-answer-name="liveDataAnswer" data-correct-answer="asset-id" data-correct-feedback="Benar. ID aset menghubungkan pembacaan sensor ke objek yang tepat." data-incorrect-feedback="Belum tepat. Data harus dapat ditautkan ke aset yang mengirimkannya.">
+            <div><p class="eyebrow">SESI PRETEST MATERI</p><h4>Apa yang memastikan pembacaan sensor tercatat pada aset yang tepat?</h4></div>
+            <label><input type="radio" name="liveDataAnswer" value="asset-id" required /><span>ID aset yang konsisten</span></label>
+            <label><input type="radio" name="liveDataAnswer" value="color" /><span>Warna ikon sensor</span></label>
+            <label><input type="radio" name="liveDataAnswer" value="dashboard" /><span>Posisi kartu di dashboard</span></label>
+            <button class="primary-btn" type="submit">Periksa jawaban</button>
+            <p class="model-lesson-quiz-status" role="status" aria-live="polite"></p>
+          </form>
+          <div class="learning-lesson-footer"><label class="learning-checklist"><input type="checkbox" data-learning-complete="live-data" /><span>Saya selesai mempelajari modul ini</span></label><p class="model-lesson-progress-status" data-learning-progress="live-data" role="status" aria-live="polite"></p></div>
+        </section>
+
+        <section id="screen-learn-insight" class="screen">
+          <div class="section-head learning-lesson-topbar">
+            <div>
+              <p class="eyebrow">MODUL 03 · ANALISIS &amp; KEPUTUSAN</p>
+              <h3>Ubah data menjadi keputusan</h3>
+            </div>
+            <button class="secondary-btn" type="button" data-go="learn">Kembali ke jalur belajar</button>
+          </div>
+          <div class="learning-lesson-lead">
+            <span class="learning-lesson-mark" aria-hidden="true">03</span>
+            <div>
+              <p class="eyebrow">PAHAMI RISIKO SEBELUM BERTINDAK</p>
+              <p>Gabungkan model aset dan data aktual untuk memahami dampak suatu kondisi. Analisis membantu menentukan prioritas, sementara simulasi memberi ruang untuk menguji tindakan sebelum diterapkan.</p>
+            </div>
+          </div>
+          <section class="learning-lesson-section" aria-labelledby="insightLessonTitle">
+            <div class="learning-lesson-section-heading">
+              <p class="eyebrow">ALUR ANALISIS</p>
+              <h4 id="insightLessonTitle">Dari sinyal hingga tindakan</h4>
+            </div>
+            <div class="model-component-grid">
+              <article class="model-component-item"><span>01 / BANDINGKAN</span><h5>Periksa kondisi</h5><p>Bandingkan data terbaru dengan nilai normal dan riwayat aset.</p></article>
+              <article class="model-component-item"><span>02 / NILAI</span><h5>Tentukan risiko</h5><p>Perhatikan tingkat keparahan, kemungkinan dampak, dan layanan yang bergantung pada aset.</p></article>
+              <article class="model-component-item"><span>03 / UJI</span><h5>Simulasikan tindakan</h5><p>Gunakan model untuk menilai pilihan perbaikan dan dampaknya sebelum diterapkan.</p></article>
+              <article class="model-component-item"><span>04 / TINDAK</span><h5>Pantau hasilnya</h5><p>Pilih tindakan yang sesuai, lalu pantau data untuk memastikan kondisi membaik.</p></article>
+            </div>
+          </section>
+          <form class="model-lesson-quiz" data-learning-quiz="insight" data-answer-name="insightAnswer" data-correct-answer="compare" data-correct-feedback="Benar. Membandingkan data aktual dengan kondisi normal membantu mengenali risiko." data-incorrect-feedback="Belum tepat. Cari langkah yang memakai konteks untuk memahami perubahan kondisi.">
+            <div><p class="eyebrow">SESI PRETEST MATERI</p><h4>Apa langkah awal untuk menilai apakah kondisi aset berisiko?</h4></div>
+            <label><input type="radio" name="insightAnswer" value="compare" required /><span>Bandingkan data aktual dengan kondisi normal dan riwayatnya</span></label>
+            <label><input type="radio" name="insightAnswer" value="guess" /><span>Pilih tindakan tanpa memeriksa data</span></label>
+            <label><input type="radio" name="insightAnswer" value="hide" /><span>Abaikan peringatan agar dashboard tetap bersih</span></label>
+            <button class="primary-btn" type="submit">Periksa jawaban</button>
+            <p class="model-lesson-quiz-status" role="status" aria-live="polite"></p>
+          </form>
+          <div class="learning-lesson-footer"><label class="learning-checklist"><input type="checkbox" data-learning-complete="insight" /><span>Saya selesai mempelajari modul ini</span></label><p class="model-lesson-progress-status" data-learning-progress="insight" role="status" aria-live="polite"></p></div>
+        </section>
+
+        <section id="screen-village" class="screen">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">KAMPUNG KOTA · MEDAN</p>
+              <h3>Twin Village</h3>
+            </div>
+            <button class="tiny-btn" data-go="missions">Lihat kampanye</button>
+          </div>
+          <section class="village-overview" aria-label="Ringkasan Twin Village">
+            <div class="village-overview-copy">
+              <span class="village-live"><i></i> KOTA KEMBAR AKTIF</span>
+              <h4 id="villageWelcomeTitle">Desa kecil, masa depan besar.</h4>
+              <p id="villageWelcomeCopy">Bantu warga menghubungkan aset, sensor, dan data agar desa tumbuh makin tangguh.</p>
+              <div class="village-overview-progress">
+                <div><span>Progres kampanye</span><strong id="villageCampaignCount">0 / 4 misi</strong></div>
+                <div class="village-progress-track"><span id="villageCampaignProgress"></span></div>
+              </div>
+              </div>
+              <div class="village-resident" aria-hidden="true"><span class="resident-sun">☀️</span><span class="resident-avatar">👩🏽‍🌾</span><span class="resident-spark">✦</span></div>
+          </section>
+
+          <section class="village-map-section" aria-labelledby="villageMapTitle">
+            <div class="village-section-heading">
+              <div><p class="eyebrow">JELAJAHI LINGKUNGAN</p><h4 id="villageMapTitle">Peta fasilitas desa</h4></div>
+              <span class="village-map-hint">Pilih lokasi untuk melihat aktivitas</span>
+            </div>
+            <div class="village-map" id="villageMap" aria-label="Peta interaktif Twin Village">
+              <div class="village-street-grid" aria-hidden="true">
+                <span class="village-street village-street-vertical village-street-one"></span>
+                <span class="village-street village-street-vertical village-street-two"></span>
+                <span class="village-street village-street-horizontal village-street-middle"></span>
+                <span class="village-street village-street-horizontal village-street-lower"></span>
+              </div>
+              <button class="village-park" type="button" data-village-spot="park" aria-pressed="false"><span class="village-park-icon" aria-hidden="true">🌳</span><span>Taman Desa</span><small>GAME</small></button>
+              <button class="village-spot village-spot-community active" type="button" data-village-spot="community" aria-pressed="true"><span class="village-building" aria-hidden="true">🏛️</span><span>Balai warga</span><i>01</i></button>
+              <button class="village-spot village-spot-homes" type="button" data-village-spot="homes" aria-pressed="false"><span class="village-building" aria-hidden="true">🏘️</span><span>Rumah warga</span><i>02</i></button>
+              <button class="village-spot village-spot-school" type="button" data-village-spot="school" aria-pressed="false"><span class="village-building" aria-hidden="true">🏫</span><span>Sekolah</span><i>03</i></button>
+              <button class="village-spot village-spot-sensor" type="button" data-village-spot="sensor" aria-pressed="false"><span class="village-building" aria-hidden="true">📡</span><span>Menara sensor</span><i>04</i></button>
+              <button class="village-spot village-spot-water" type="button" data-village-spot="water" aria-pressed="false"><span class="village-building" aria-hidden="true">🚰</span><span>Pompa air</span><i>05</i></button>
+              <div class="village-map-caption"><span>📍</span><span id="villageMapLocation">Twin Village · Medan</span><span class="village-weather">☀️ 28°</span></div>
+            </div>
+          </section>
+
+          <section class="village-unity-entry" aria-labelledby="villageUnityEntryTitle">
+            <div class="village-unity-entry-icon" aria-hidden="true">◈</div>
+            <div><p class="eyebrow">PENGALAMAN 3D · UNITY WEBGL</p><h4 id="villageUnityEntryTitle">Jelajahi Twin City dalam 3D</h4><p>Masuk ke ruang Digital Twin interaktif dari build Unity.</p></div>
+            <button class="village-unity-open" type="button" data-go="unity-twin">Buka Dunia 3D <span aria-hidden="true">↗</span></button>
+          </section>
+
+          <section class="village-learning-card" aria-labelledby="villageLearningTitle">
+            <div class="village-learning-emblem" aria-hidden="true">◈</div>
+            <div class="village-learning-copy">
+              <p class="eyebrow">KELAS BARU · 5 MENIT</p>
+              <h4 id="villageLearningTitle">Kenali Digital Twin</h4>
+              <p>Pahami cara model, data sensor, dan analisis bekerja bersama untuk membantu kota mengambil keputusan.</p>
+              <div class="village-learning-meta"><span>3 konsep inti</span><span>·</span><span>1 kuis pemahaman</span></div>
+            </div>
+            <div class="village-learning-action-wrap">
+              <span class="village-learning-progress" id="villageLearningProgress">Belum dimulai</span>
+              <button class="village-learning-start" id="villageLearningStart" type="button" data-go="village-learning">Mulai belajar <span aria-hidden="true">↗</span></button>
+            </div>
+          </section>
+
+          <div class="village-content-grid">
+            <section class="village-resident-request" aria-labelledby="villageRequestTitle">
+              <div class="request-avatar" aria-hidden="true">👩🏽‍🌾</div>
+              <div class="request-copy">
+                <p class="eyebrow">PERMINTAAN WARGA · BU RANI</p>
+                <h4 id="villageRequestTitle">Balai warga menunggu bantuanmu</h4>
+                <p id="villageRequestCopy">Selesaikan misi berikutnya untuk membantu desa.</p>
+                <button class="village-request-action" id="villageRequestAction" type="button">Bantu warga <span aria-hidden="true">↗</span></button>
+              </div>
+              <span class="request-spark" aria-hidden="true">✦</span>
+            </section>
+            <section class="village-facility-detail" aria-live="polite" aria-labelledby="villageFacilityTitle">
+              <p class="eyebrow">LOKASI TERPILIH</p>
+              <h4 id="villageFacilityTitle">Balai warga</h4>
+              <p id="villageFacilityCopy">Pusat kabar dan koordinasi warga. Mulai petualangan Digital Twin dari sini.</p>
+              <button class="village-facility-action" id="villageFacilityAction" type="button">Buka aktivitas <span aria-hidden="true">↗</span></button>
+            </section>
+          </div>
+
+          <section class="village-status-section" aria-labelledby="villageStatusTitle">
+            <div class="village-section-heading">
+              <div><p class="eyebrow">KONDISI DESA</p><h4 id="villageStatusTitle">Desa makin terhubung</h4></div>
+              <span class="village-status-note">Diperbarui dari progres misi</span>
+            </div>
+            <div class="village-status-grid">
+              <article class="village-status-item"><div><span class="village-status-icon">🧠</span><span>Kesadaran Digital Twin</span><strong id="villageAwarenessValue">35%</strong></div><div class="village-meter"><span id="villageAwarenessMeter"></span></div></article>
+              <article class="village-status-item"><div><span class="village-status-icon">🏗️</span><span>Kesiapan bangunan</span><strong id="villageBuildingValue">20%</strong></div><div class="village-meter"><span id="villageBuildingMeter"></span></div></article>
+              <article class="village-status-item"><div><span class="village-status-icon">📡</span><span>Koneksi sensor</span><strong id="villageSensorValue">15%</strong></div><div class="village-meter"><span id="villageSensorMeter"></span></div></article>
+            </div>
+          </section>
+
+          <section class="village-missions panel-card" aria-labelledby="campaignZoneLabel">
+            <div class="village-section-heading">
+              <div><p class="eyebrow">LANGKAH PETUALANGAN</p><h4 id="campaignZoneLabel">Kampanye: Twin Village</h4></div>
+              <button class="village-all-missions" type="button" data-go="missions">Semua misi ↗</button>
+            </div>
+            <ul class="mission-list" id="tutorialMissionList"></ul>
+          </section>
+        </section>
+
+        <section id="screen-village-learning" class="screen">
+          <div class="section-head learning-lesson-topbar">
+            <div>
+              <p class="eyebrow">TWIN VILLAGE · KELAS DIGITAL TWIN</p>
+              <h3>Kenali Digital Twin</h3>
+            </div>
+            <button class="secondary-btn" type="button" data-go="village">Kembali ke Twin Village</button>
+          </div>
+          <div class="village-learning-lead">
+            <span class="village-learning-lead-icon" aria-hidden="true">🏙️</span>
+            <div>
+              <p class="eyebrow">KOTA NYATA, CERMIN DIGITAL</p>
+              <p>Digital Twin adalah representasi digital dari aset atau kota yang terus diperbarui dengan data kondisi nyata. Dengan begitu, kita dapat memahami keadaan, melihat risiko, dan menguji pilihan sebelum bertindak.</p>
+            </div>
+          </div>
+          <section class="village-learning-concepts" aria-label="Tiga konsep Digital Twin">
+            <article class="village-learning-concept"><span>01 · MODEL</span><div class="village-concept-icon">🏗️</div><h4>Kenali aset</h4><p>Model BIM memberi bentuk, lokasi, dan identitas untuk setiap bangunan serta peralatan.</p><button class="village-concept-link" type="button" data-go="learn-model">Pelajari BIM &amp; Digital Twin <span aria-hidden="true">↗</span></button></article>
+            <article class="village-learning-concept"><span>02 · DATA</span><div class="village-concept-icon">📡</div><h4>Hubungkan kondisi</h4><p>Sensor mengirim data seperti suhu, tekanan, atau getaran pada aset yang tepat.</p></article>
+            <article class="village-learning-concept"><span>03 · INSIGHT</span><div class="village-concept-icon">🧠</div><h4>Pilih tindakan</h4><p>Analisis membantu menemukan perubahan, memahami dampaknya, lalu menentukan langkah terbaik.</p></article>
+          </section>
+          <aside class="village-learning-example">
+            <span aria-hidden="true">💧</span>
+            <div><p class="eyebrow">CONTOH DI TWIN VILLAGE</p><p>Sensor membaca tekanan pompa air. Nilainya muncul pada model pompa yang benar, lalu sistem memberi peringatan saat tekanan turun agar petugas bisa memeriksa lebih awal.</p></div>
+          </aside>
+          <form class="village-learning-quiz" id="villageLearningQuiz">
+            <div><p class="eyebrow">CEK PEMAHAMAN</p><h4>Apa yang membuat Digital Twin mencerminkan kondisi aset terkini?</h4></div>
+            <label><input type="radio" name="villageLearningAnswer" value="connected" required /><span>Model aset yang terhubung dengan data sensor aktual</span></label>
+            <label><input type="radio" name="villageLearningAnswer" value="model-only" /><span>Model 3D yang tidak pernah diperbarui</span></label>
+            <label><input type="radio" name="villageLearningAnswer" value="map-only" /><span>Peta lokasi tanpa data kondisi aset</span></label>
+            <button class="primary-btn" type="submit">Periksa jawaban</button>
+            <p class="village-learning-quiz-status" id="villageLearningQuizStatus" role="status" aria-live="polite"></p>
+          </form>
+          <div class="village-learning-completion">
+            <label><input type="checkbox" id="completeVillageLearning" /><span>Saya selesai mempelajari materi ini</span></label>
+            <p id="villageLearningCompletionStatus" role="status" aria-live="polite">Jawab kuis dengan benar untuk membuka checklist.</p>
+          </div>
+        </section>
+
+        <section id="screen-village-school-game" class="screen">
+          <div class="section-head learning-lesson-topbar">
+            <div>
+              <p class="eyebrow">TWIN VILLAGE · SEKOLAH DESA</p>
+              <h3>Akademi Twini: Detektif Data</h3>
+            </div>
+            <div class="village-school-header-actions">
+              <button class="secondary-btn" type="button" data-go="village-learning">Materi ringkas</button>
+              <button class="secondary-btn" type="button" data-go="village">Kembali ke desa</button>
+            </div>
+          </div>
+          <div class="village-school-welcome">
+            <div class="village-school-professor" aria-hidden="true"><span>🤓</span><i>✦</i></div>
+            <div><p class="eyebrow">PROFESOR TWINI BERTANYA</p><h4>“Kembarannya kok ngaco, ya?”</h4><p>Data pompa ini dari tiga hari lalu. Bantu Twini menyelidiki sebelum dia menyuruh ikan-ikan ikut rapat.</p></div>
+            <span class="village-school-doodle" aria-hidden="true">〰</span>
+          </div>
+          <div class="village-school-hud">
+            <div><span>KASUS</span><strong id="villageSchoolRound">1 / 3</strong></div>
+            <div class="village-school-progress"><span id="villageSchoolProgressBar"></span></div>
+            <div><span>POIN DETEKTIF</span><strong id="villageSchoolScore">0</strong></div>
+          </div>
+          <div id="villageSchoolGameContent" aria-live="polite"></div>
+        </section>
+
+        <section id="screen-unity-twin" class="screen">
+          <div class="section-head learning-lesson-topbar">
+            <div><p class="eyebrow">TWIN VILLAGE · UNITY WEBGL</p><h3>Dunia Twin 3D</h3></div>
+            <button class="secondary-btn" type="button" data-go="village">Kembali ke Twin Village</button>
+          </div>
+          <div class="unity-player-shell">
+            <div class="unity-player-heading"><div><p class="eyebrow">LIVE DIGITAL TWIN</p><h4>Medan · Twin Village</h4></div><span class="unity-player-badge"><i></i> WEBGL PLAYER</span></div>
+            <div class="unity-webgl-stage" id="unityWebGLFrame">
+              <canvas id="unityWebGLCanvas" aria-label="Unity WebGL Twin City 3D" tabindex="0"></canvas>
+              <div class="unity-stage-empty" id="unityWebGLStatus" role="status" aria-live="polite" data-tone="missing">
+                <span class="unity-stage-mark" aria-hidden="true">◈</span>
+                <strong>Unity WebGL siap dihubungkan</strong>
+                <p>Build Unity belum ditemukan. Letakkan hasil WebGL di <code>unity/Build/</code>; instruksi bridge tersedia di panduan Unity.</p>
+                <a href="unity/README.md" target="_blank" rel="noopener noreferrer">Buka panduan integrasi ↗</a>
+              </div>
+              <progress class="unity-webgl-loading" id="unityWebGLLoading" max="100" value="0" hidden>0%</progress>
+            </div>
+            <div class="unity-player-footer"><span id="unityBridgeStatus">Bridge web ↔ Unity menunggu build.</span><button class="unity-sync-button" id="unitySyncVillageState" type="button" disabled>Kirim data desa</button></div>
+          </div>
+          <div class="unity-player-notes"><span>MODEL ASET</span><i>→</i><span>DATA SENSOR</span><i>→</i><span>KEPUTUSAN KOTA</span></div>
+        </section>
+
+        <section id="screen-village-game" class="screen">
+          <div class="section-head learning-lesson-topbar">
+            <div>
+              <p class="eyebrow">TWIN VILLAGE · TAMAN DESA</p>
+              <h3>Twin Response</h3>
+            </div>
+            <button class="secondary-btn" type="button" data-go="village">Kembali ke Twin Village</button>
+          </div>
+          <div class="village-game-intro">
+            <div class="village-game-intro-icon" aria-hidden="true">💧</div>
+            <div><p class="eyebrow">SIMULASI DIGITAL TWIN</p><h4>Jaga pompa air tetap berjalan</h4><p>Hubungkan sinyal sensor, kenali kondisi aset, lalu pilih tindakan yang tepat. Setiap ronde menunjukkan cara Digital Twin bekerja.</p></div>
+          </div>
+          <div class="village-game-hud">
+            <div><span>RONDE</span><strong id="villageGameRound">1 / 3</strong></div>
+            <div class="village-game-progress"><span id="villageGameProgressBar"></span></div>
+            <div><span>SKOR</span><strong id="villageGameScore">0</strong></div>
+          </div>
+          <div id="villageTwinGameContent" aria-live="polite"></div>
+        </section>
+
+        <section id="screen-village-hall" class="screen">
+          <div class="section-head learning-lesson-topbar">
+            <div>
+              <p class="eyebrow">TWIN VILLAGE · BALAI WARGA</p>
+              <h3>Rembuk Kebutuhan Warga</h3>
+            </div>
+            <button class="secondary-btn" type="button" data-go="village">Kembali ke Twin Village</button>
+          </div>
+          <div class="village-hall-banner">
+            <div class="village-hall-banner-icon" aria-hidden="true">🏛️</div>
+            <div><p class="eyebrow">MISI TV-001 · MUSYAWARAH DIGITAL</p><h4>Suara warga bertemu data kota</h4><p>Dengarkan kebutuhan, periksa bukti Digital Twin, lalu sepakati tindakan yang paling bermanfaat untuk semua.</p></div>
+          </div>
+          <div class="village-hall-progress">
+            <div><span>LANGKAH MUSYAWARAH</span><strong id="villageHallStep">1 / 3</strong></div>
+            <div class="village-hall-progress-track"><span id="villageHallProgressBar"></span></div>
+            <span class="village-hall-reward">HADIAH MISI · +200 XP · +25 TWIN POINT</span>
+          </div>
+          <div id="villageHallActivity" aria-live="polite"></div>
+        </section>
+
+        <section id="screen-settings" class="screen">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">PREFERENSI TAMPILAN</p>
+              <h3>Pengaturan dashboard</h3>
+            </div>
+          </div>
+          <form class="panel-card dashboard-settings" id="dashboardSettingsForm">
+            <div class="panel-title-row">
+              <div>
+                <p class="eyebrow">DASHBOARD ATAS</p>
+                <h3>Indikator yang ditampilkan</h3>
+              </div>
+              <span class="badge soft">Tersimpan di perangkat</span>
+            </div>
+            <p class="settings-description">Atur informasi profil dan indikator yang tampil di bagian atas dashboard.</p>
+            <div class="header-setting-options">
+              <label class="dashboard-setting-option"><input type="checkbox" name="showTopProfile"><span>Tampilkan info profil di header</span></label>
+              <label class="dashboard-setting-option"><input type="checkbox" name="autoHideRibbon"><span>Ribbon Belajar auto-hide</span></label>
+            </div>
+            <div class="panel-title-row settings-subhead">
+              <div>
+                <p class="eyebrow">DASHBOARD ATAS</p>
+                <h3>Indikator yang ditampilkan</h3>
+              </div>
+            </div>
+            <div class="dashboard-setting-options">
+              <label class="dashboard-setting-option"><input type="checkbox" name="dashboardStats" value="energy"><span>❤️ Energi</span></label>
+              <label class="dashboard-setting-option"><input type="checkbox" name="dashboardStats" value="xp"><span>⭐ XP</span></label>
+              <label class="dashboard-setting-option"><input type="checkbox" name="dashboardStats" value="coins"><span>💰 Koin</span></label>
+              <label class="dashboard-setting-option"><input type="checkbox" name="dashboardStats" value="twinPoints"><span>🔷 Twin Point</span></label>
+              <label class="dashboard-setting-option"><input type="checkbox" name="dashboardStats" value="level"><span>🏆 Level</span></label>
+            </div>
+            <button class="primary-btn" type="submit">Simpan pengaturan</button>
+            <p class="settings-save-status" id="settingsSaveStatus" role="status" aria-live="polite"></p>
+          </form>
+          <section class="panel-card admin-users-panel" aria-labelledby="adminUsersTitle">
+            <div class="panel-title-row">
+              <div>
+                <p class="eyebrow">CMS ADMIN</p>
+                <h3 id="adminUsersTitle">Manajemen pengguna</h3>
+              </div>
+              <span class="badge soft">AKUN &amp; AKSES</span>
+            </div>
+            <p class="settings-description">Kelola akun admin dan role akses CMS.</p>
+            <form class="admin-auth-form" id="adminSetupForm" hidden>
+              <h4>Penyiapan super admin</h4>
+              <p class="admin-form-note">Buat akun super admin pertama untuk perangkat ini.</p>
+              <label for="adminSetupEmail">Email</label>
+              <input id="adminSetupEmail" name="email" type="email" value="dani.hd@idtc.org" autocomplete="username" required />
+              <label for="adminSetupPassword">Password</label>
+              <input id="adminSetupPassword" name="password" type="password" minlength="10" autocomplete="new-password" required />
+              <button class="primary-btn" type="submit">Buat super admin</button>
+            </form>
+            <form class="admin-auth-form" id="adminLoginForm" hidden>
+              <h4>Masuk admin</h4>
+              <label for="adminLoginEmail">Email</label>
+              <input id="adminLoginEmail" name="email" type="email" autocomplete="username" required />
+              <label for="adminLoginPassword">Password</label>
+              <input id="adminLoginPassword" name="password" type="password" autocomplete="current-password" required />
+              <button class="primary-btn" type="submit">Masuk</button>
+            </form>
+            <div class="admin-user-management" id="adminUserManagement" hidden>
+              <div class="admin-user-toolbar">
+                <p class="admin-current-user" id="adminCurrentUser"></p>
+                <button class="secondary-btn" id="adminLogoutButton" type="button">Keluar</button>
+              </div>
+              <form class="admin-create-user" id="adminCreateUserForm">
+                <h4>Tambah pengguna</h4>
+                <label for="newAdminEmail">Email</label>
+                <input id="newAdminEmail" name="email" type="email" autocomplete="off" required />
+                <label for="newAdminPassword">Password sementara</label>
+                <input id="newAdminPassword" name="password" type="password" minlength="10" autocomplete="new-password" required />
+                <label for="newAdminRole">Role</label>
+                <select id="newAdminRole" name="role">
+                  <option value="admin">Admin</option>
+                  <option value="editor" selected>Editor</option>
+                  <option value="viewer">Viewer</option>
+                </select>
+                <button class="primary-btn" type="submit">Tambah pengguna</button>
+              </form>
+              <div class="admin-users-list-wrap">
+                <h4>Pengguna terdaftar</h4>
+                <div class="admin-users-list" id="adminUsersList"></div>
+              </div>
+            </div>
+            <p class="settings-save-status" id="adminUsersStatus" role="status" aria-live="polite"></p>
+          </section>
+        </section>
+
+        <section id="screen-crypto" class="screen">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">REWARD WALLET</p>
+              <h3>DT Crypto</h3>
+            </div>
+            <span class="badge soft crypto-sim-badge">SIMULASI LOKAL</span>
+          </div>
+          <div class="crypto-balance-grid">
+            <div class="crypto-balance-panel dt-point-panel">
+              <span>DT Point tersedia</span>
+              <strong id="dtPointBalance">0</strong>
+              <small>Poin dari misi dan pencapaian tervalidasi</small>
+            </div>
+            <div class="crypto-balance-panel dt-crypto-panel">
+              <span>DT Crypto simulasi</span>
+              <strong id="dtCryptoBalance">0</strong>
+              <small>Belum berupa token on-chain</small>
+            </div>
+          </div>
+          <div class="crypto-wallet-layout">
+            <form class="panel-card crypto-exchange-form" id="dtCryptoExchangeForm">
+              <div>
+                <p class="eyebrow">KONVERSI POIN</p>
+                <h3>Tukar DT Point</h3>
+              </div>
+              <p class="crypto-rate">Kurs pilot: <strong>1.000 DT Point = 1 DT Crypto</strong></p>
+              <label for="dtPointExchangeAmount">Jumlah DT Point</label>
+              <input id="dtPointExchangeAmount" name="amount" type="number" min="1000" step="1000" value="1000" required />
+              <div class="crypto-estimate"><span>Estimasi diterima</span><strong id="dtCryptoEstimate">1 DT Crypto</strong></div>
+              <button class="primary-btn" type="submit">Tukar secara simulasi</button>
+              <p class="crypto-demo-notice">Demo lokal saja. Penukaran ini tidak mengirim token, tidak terhubung ke wallet, dan tidak memiliki nilai Rupiah.</p>
+              <p class="settings-save-status" id="dtCryptoExchangeStatus" role="status" aria-live="polite"></p>
+            </form>
+            <div class="panel-card crypto-ledger-panel">
+              <div class="panel-title-row">
+                <h3>Riwayat DT Point</h3>
+                <span class="badge soft">TERBARU</span>
+              </div>
+              <div id="dtPointLedger" class="dt-point-ledger"></div>
+            </div>
+          </div>
+          <section class="dt-reward-market" aria-labelledby="dtRewardMarketTitle">
+            <div class="panel-title-row">
+              <div>
+                <p class="eyebrow">HADIAH PENCAPAIAN</p>
+                <h3 id="dtRewardMarketTitle">Tukar DT Point</h3>
+              </div>
+              <span class="badge soft crypto-sim-badge">KATALOG SIMULASI</span>
+            </div>
+            <p class="crypto-market-notice">Hadiah contoh untuk progres Belajar Digital Twin. Penukaran tersimpan sebagai simulasi lokal dan belum menerbitkan voucher atau mengirim barang.</p>
+            <div class="dt-reward-grid" id="dtRewardCatalog"></div>
+            <p class="settings-save-status" id="dtRewardStatus" role="status" aria-live="polite"></p>
+          </section>
+        </section>
+
+        <section id="screen-sponsorship" class="screen">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">KEMITRAAN &amp; DUKUNGAN</p>
+              <h3>Sponsorship pengembangan IDTC</h3>
+            </div>
+            <span class="badge soft crypto-sim-badge">INFORMASI PROGRAM</span>
+          </div>
+          <div class="sponsorship-intro">
+            <p>IDTC membuka peluang kolaborasi untuk membangun ekosistem pembelajaran Digital Twin, Smart City, BIM, IoT, dan geospasial.</p>
+            <p class="sponsorship-disclaimer">Daftar berikut adalah calon mitra dan pihak yang ingin dilibatkan. Nama yang tercantum tidak menyatakan sponsor atau kerja sama resmi telah disepakati.</p>
+          </div>
+          <div class="sponsorship-grid">
+            <article class="sponsorship-card">
+              <span class="sponsorship-icon" aria-hidden="true">🏛️</span>
+              <p class="eyebrow">SEKTOR PUBLIK</p>
+              <h3>Instansi Pemerintah</h3>
+              <p>Dukungan kebijakan, tantangan kota, data publik yang layak dibagikan, dan penerapan solusi Digital Twin.</p>
+              <div class="sponsorship-logo-grid" aria-label="Logo calon mitra instansi pemerintah">
+                <a class="sponsorship-logo" href="https://pu.go.id/" target="_blank" rel="noopener noreferrer" aria-label="Situs resmi Kementerian Pekerjaan Umum">
+                  <img src="https://www.google.com/s2/favicons?domain=pu.go.id&amp;sz=128" alt="Logo Kementerian Pekerjaan Umum" loading="lazy" decoding="async" />
+                  <span>Kementerian Pekerjaan Umum</span>
+                </a>
+                <a class="sponsorship-logo" href="https://kemenkoip.go.id/" target="_blank" rel="noopener noreferrer" aria-label="Situs resmi Kementerian Koordinator Bidang Infrastruktur dan Pembangunan Kewilayahan">
+                  <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQIr3conQwhxsDSWGmpnvk4NLPS5smSApnFiFSMxo8MJbUReohetBkb1Q&amp;s" alt="Logo Kementerian Koordinator Bidang Infrastruktur dan Pembangunan Kewilayahan" loading="lazy" decoding="async" />
+                  <span>Kemenko Infrastruktur &amp; Pembangunan Kewilayahan</span>
+                </a>
+                <a class="sponsorship-logo" href="https://pkp.go.id/" target="_blank" rel="noopener noreferrer" aria-label="Situs resmi Kementerian Perumahan dan Kawasan Permukiman">
+                  <img src="https://www.google.com/s2/favicons?domain=pkp.go.id&amp;sz=128" alt="Logo Kementerian Perumahan dan Kawasan Permukiman" loading="lazy" decoding="async" />
+                  <span>Kementerian Perumahan &amp; Kawasan Permukiman</span>
+                </a>
+                <a class="sponsorship-logo" href="https://dephub.go.id/" target="_blank" rel="noopener noreferrer" aria-label="Situs resmi Kementerian Perhubungan">
+                  <img src="https://www.google.com/s2/favicons?domain=dephub.go.id&amp;sz=128" alt="Logo Kementerian Perhubungan" loading="lazy" decoding="async" />
+                  <span>Kementerian Perhubungan</span>
+                </a>
+                <a class="sponsorship-logo" href="https://www.atrbpn.go.id/" target="_blank" rel="noopener noreferrer" aria-label="Situs resmi Kementerian Agraria dan Tata Ruang">
+                  <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Logo_BPN-KemenATR_%282017%29.png" alt="Logo Kementerian Agraria dan Tata Ruang" loading="lazy" decoding="async" />
+                  <span>Kementerian Agraria &amp; Tata Ruang</span>
+                </a>
+                <a class="sponsorship-logo" href="https://www.komdigi.go.id/" target="_blank" rel="noopener noreferrer" aria-label="Situs resmi Kementerian Komunikasi dan Digital">
+                  <img src="https://www.google.com/s2/favicons?domain=komdigi.go.id&amp;sz=128" alt="Logo Kementerian Komunikasi dan Digital" loading="lazy" decoding="async" />
+                  <span>Kementerian Komunikasi &amp; Digital</span>
+                </a>
+                <a class="sponsorship-logo" href="https://www.big.go.id/" target="_blank" rel="noopener noreferrer" aria-label="Situs resmi Badan Informasi Geospasial">
+                  <img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/Badan_Informasi_Geospasial_logo.png" alt="Logo Badan Informasi Geospasial" loading="lazy" decoding="async" />
+                  <span>Badan Informasi Geospasial</span>
+                </a>
+              </div>
+              <ul><li>Kementerian dan lembaga terkait</li><li>Pemerintah daerah dan dinas teknis</li><li>Program transformasi digital dan kota cerdas</li></ul>
+            </article>
+            <article class="sponsorship-card">
+              <span class="sponsorship-icon" aria-hidden="true">🏢</span>
+              <p class="eyebrow">BUMN &amp; BUMD</p>
+              <h3>Perusahaan Milik Negara/Daerah</h3>
+              <p>Kolaborasi studi kasus aset, infrastruktur, energi, transportasi, air, dan fasilitas publik.</p>
+              <div class="sponsorship-logo-grid" aria-label="Logo calon mitra perusahaan konstruksi">
+                <a class="sponsorship-logo" href="https://adhi.co.id/" target="_blank" rel="noopener noreferrer" aria-label="Situs resmi ADHI Karya">
+                  <img src="https://upload.wikimedia.org/wikipedia/id/7/79/Adhi_Karya.svg" alt="Logo ADHI Karya" loading="lazy" decoding="async" />
+                  <span>ADHI KARYA</span>
+                </a>
+                <a class="sponsorship-logo" href="https://www.ptpp.co.id/" target="_blank" rel="noopener noreferrer" aria-label="Situs resmi PT PP">
+                  <img src="https://www.ptpp.co.id/_nuxt/img/site-logo.0b5b997.webp" alt="Logo PT PP" loading="lazy" decoding="async" />
+                  <span>PT PP</span>
+                </a>
+                <a class="sponsorship-logo" href="https://www.waskita.co.id/" target="_blank" rel="noopener noreferrer" aria-label="Situs Waskita Karya">
+                  <img src="https://thumb.wikimedia.org/wikipedia/id/thumb/7/73/Waskita_Karya.svg/500px-Waskita_Karya.svg.png" alt="Logo Waskita Karya" loading="lazy" decoding="async" />
+                  <span>WASKITA</span>
+                </a>
+                <a class="sponsorship-logo" href="https://www.wika.co.id/" target="_blank" rel="noopener noreferrer" aria-label="Situs resmi WIKA">
+                  <img src="https://www.wika.co.id/assets/img/logo-wika-head-blue.png" alt="Logo Wijaya Karya (WIKA)" loading="lazy" decoding="async" />
+                  <span>WIKA</span>
+                </a>
+                <a class="sponsorship-logo" href="https://www.hutamakarya.com/" target="_blank" rel="noopener noreferrer" aria-label="Situs resmi Hutama Karya">
+                  <img src="https://thumb.wikimedia.org/wikipedia/id/thumb/5/56/Hutama_Karya.svg/500px-Hutama_Karya.svg.png" alt="Logo Hutama Karya" loading="lazy" decoding="async" />
+                  <span>HUTAMA KARYA</span>
+                </a>
+                <a class="sponsorship-logo" href="https://www.brantas-abipraya.co.id/" target="_blank" rel="noopener noreferrer" aria-label="Situs Brantas Abipraya">
+                  <img src="https://www.google.com/s2/favicons?domain=brantas-abipraya.co.id&amp;sz=128" alt="Ikon situs Brantas Abipraya" loading="lazy" decoding="async" />
+                  <span>BRANTAS ABIPRAYA</span>
+                </a>
+              </div>
+              <ul><li>Tantangan industri berbasis aset</li><li>Mentoring dan kunjungan belajar</li><li>Hadiah untuk pencapaian peserta</li></ul>
+            </article>
+            <article class="sponsorship-card">
+              <span class="sponsorship-icon" aria-hidden="true">🛰️</span>
+              <p class="eyebrow">TEKNOLOGI &amp; INDUSTRI</p>
+              <h3>Perusahaan Terkait</h3>
+              <p>Peluang dukungan perangkat lunak, lisensi edukasi, pelatihan, perangkat, dan keahlian teknis.</p>
+              <div class="sponsorship-logo-grid sponsorship-logo-grid--dense" aria-label="Logo calon mitra teknologi dan sensor">
+                <a class="sponsorship-logo" href="https://www.esri.com/id-id/home" target="_blank" rel="noopener noreferrer" aria-label="Situs resmi Esri Indonesia"><img src="https://www.google.com/s2/favicons?domain=esri.com&amp;sz=128" alt="Logo Esri Indonesia" loading="lazy" decoding="async" /><span>Esri Indonesia</span></a>
+                <a class="sponsorship-logo" href="https://www.autodesk.com/" target="_blank" rel="noopener noreferrer" aria-label="Situs resmi Autodesk"><img src="https://www.google.com/s2/favicons?domain=autodesk.com&amp;sz=128" alt="Logo Autodesk" loading="lazy" decoding="async" /><span>Autodesk</span></a>
+                <a class="sponsorship-logo" href="https://www.trimble.com/" target="_blank" rel="noopener noreferrer" aria-label="Situs resmi Trimble"><img src="https://www.google.com/s2/favicons?domain=trimble.com&amp;sz=128" alt="Logo Trimble" loading="lazy" decoding="async" /><span>Trimble</span></a>
+                <a class="sponsorship-logo" href="https://leica-geosystems.com/" target="_blank" rel="noopener noreferrer" aria-label="Situs resmi Leica Geosystems"><img src="https://www.google.com/s2/favicons?domain=leica-geosystems.com&amp;sz=128" alt="Logo Leica Geosystems" loading="lazy" decoding="async" /><span>Leica Geosystems</span></a>
+                <a class="sponsorship-logo" href="https://www.asaba.co.id/" target="_blank" rel="noopener noreferrer" aria-label="Situs resmi ASABA"><img src="https://www.google.com/s2/favicons?domain=asaba.co.id&amp;sz=128" alt="Logo ASABA" loading="lazy" decoding="async" /><span>ASABA</span></a>
+                <a class="sponsorship-logo" href="https://www.aptella.com/" target="_blank" rel="noopener noreferrer" aria-label="Situs resmi Aptella"><img src="https://www.google.com/s2/favicons?domain=aptella.com&amp;sz=128" alt="Logo Aptella" loading="lazy" decoding="async" /><span>Aptella</span></a>
+                <a class="sponsorship-logo" href="https://graphisoft.com/" target="_blank" rel="noopener noreferrer" aria-label="Situs resmi Graphisoft"><img src="https://www.google.com/s2/favicons?domain=graphisoft.com&amp;sz=128" alt="Logo Graphisoft" loading="lazy" decoding="async" /><span>Graphisoft</span></a>
+                <a class="sponsorship-logo" href="https://www.se.com/id/id/" target="_blank" rel="noopener noreferrer" aria-label="Situs resmi Schneider Electric"><img src="https://www.google.com/s2/favicons?domain=se.com&amp;sz=128" alt="Logo Schneider Electric" loading="lazy" decoding="async" /><span>Schneider Electric</span></a>
+                <a class="sponsorship-logo" href="https://www.autonics.com/id/company/information/overview" target="_blank" rel="noopener noreferrer" aria-label="Situs resmi PT Autonics Indonesia"><img src="https://www.google.com/s2/favicons?domain=autonics.com&amp;sz=128" alt="Logo PT Autonics Indonesia" loading="lazy" decoding="async" /><span>PT Autonics Indonesia</span></a>
+                <a class="sponsorship-logo" href="https://www.keyence.co.id/" target="_blank" rel="noopener noreferrer" aria-label="Situs resmi PT Keyence Indonesia"><img src="https://www.google.com/s2/favicons?domain=keyence.co.id&amp;sz=128" alt="Logo PT Keyence Indonesia" loading="lazy" decoding="async" /><span>PT Keyence Indonesia</span></a>
+                <a class="sponsorship-logo" href="https://www.tdk-electronics.tdk.com/en/3100390/careers/tdk-electronics-sites/indonesia/id" target="_blank" rel="noopener noreferrer" aria-label="Situs resmi PT TDK Electronics Indonesia"><img src="https://www.google.com/s2/favicons?domain=tdk-electronics.tdk.com&amp;sz=128" alt="Logo PT TDK Electronics Indonesia" loading="lazy" decoding="async" /><span>PT TDK Electronics Indonesia</span></a>
+                <a class="sponsorship-logo" href="https://suryasarana.com/kategori/sensor" target="_blank" rel="noopener noreferrer" aria-label="Situs resmi PT Surya Sarana Dinamika"><img src="https://www.google.com/s2/favicons?domain=suryasarana.com&amp;sz=128" alt="Logo PT Surya Sarana Dinamika" loading="lazy" decoding="async" /><span>PT Surya Sarana Dinamika</span></a>
+                <a class="sponsorship-logo" href="https://www.alfafikrindoutama.com/about" target="_blank" rel="noopener noreferrer" aria-label="Situs resmi PT Alfa Fikrindo Utama"><img src="https://www.google.com/s2/favicons?domain=alfafikrindoutama.com&amp;sz=128" alt="Logo PT Alfa Fikrindo Utama" loading="lazy" decoding="async" /><span>PT Alfa Fikrindo Utama</span></a>
+                <a class="sponsorship-logo" href="https://fmsoftware.com/" target="_blank" rel="noopener noreferrer" aria-label="Situs resmi FM Software"><img src="https://www.google.com/s2/favicons?domain=fmsoftware.com&amp;sz=128" alt="Logo FM Software" loading="lazy" decoding="async" /><span>FM Software</span></a>
+                <a class="sponsorship-logo" href="https://www.toyosensing.com/" target="_blank" rel="noopener noreferrer" aria-label="Situs resmi Toyo Sensing Indonesia"><img src="https://www.google.com/s2/favicons?domain=toyosensing.com&amp;sz=128" alt="Logo Toyo Sensing Indonesia" loading="lazy" decoding="async" /><span>Toyo Sensing Indonesia</span></a>
+              </div>
+            </article>
+            <article class="sponsorship-card">
+              <span class="sponsorship-icon" aria-hidden="true">🎓</span>
+              <p class="eyebrow">RISET &amp; TALENTA</p>
+              <h3>Kampus Pendukung</h3>
+              <p>Kampus dapat berkolaborasi pada kurikulum, riset, proyek mahasiswa, validasi materi, dan mentor.</p>
+              <div class="sponsorship-logo-grid" aria-label="Logo kampus Indonesia calon pendukung Digital Twin">
+                <a class="sponsorship-logo" href="https://itb.ac.id/" target="_blank" rel="noopener noreferrer" aria-label="Situs resmi Institut Teknologi Bandung"><img src="https://www.google.com/s2/favicons?domain=itb.ac.id&amp;sz=128" alt="Logo ITB" loading="lazy" decoding="async" /><span>ITB</span></a>
+                <a class="sponsorship-logo" href="https://ui.ac.id/" target="_blank" rel="noopener noreferrer" aria-label="Situs resmi Universitas Indonesia"><img src="https://www.google.com/s2/favicons?domain=ui.ac.id&amp;sz=128" alt="Logo UI" loading="lazy" decoding="async" /><span>UI</span></a>
+                <a class="sponsorship-logo" href="https://www.ugm.ac.id/" target="_blank" rel="noopener noreferrer" aria-label="Situs resmi Universitas Gadjah Mada"><img src="https://www.google.com/s2/favicons?domain=ugm.ac.id&amp;sz=128" alt="Logo UGM" loading="lazy" decoding="async" /><span>UGM</span></a>
+                <a class="sponsorship-logo" href="https://www.its.ac.id/" target="_blank" rel="noopener noreferrer" aria-label="Situs resmi Institut Teknologi Sepuluh Nopember"><img src="https://www.google.com/s2/favicons?domain=its.ac.id&amp;sz=128" alt="Logo ITS" loading="lazy" decoding="async" /><span>ITS</span></a>
+                <a class="sponsorship-logo" href="https://www.ipb.ac.id/" target="_blank" rel="noopener noreferrer" aria-label="Situs resmi IPB University"><img src="https://www.google.com/s2/favicons?domain=ipb.ac.id&amp;sz=128" alt="Logo IPB University" loading="lazy" decoding="async" /><span>IPB University</span></a>
+                <a class="sponsorship-logo" href="https://www.itenas.ac.id/" target="_blank" rel="noopener noreferrer" aria-label="Situs resmi ITENAS"><img src="https://www.google.com/s2/favicons?domain=itenas.ac.id&amp;sz=128" alt="Logo ITENAS" loading="lazy" decoding="async" /><span>ITENAS</span></a>
+                <a class="sponsorship-logo" href="https://binus.ac.id/" target="_blank" rel="noopener noreferrer" aria-label="Situs resmi BINUS University"><img src="https://www.google.com/s2/favicons?domain=binus.ac.id&amp;sz=128" alt="Logo BINUS University" loading="lazy" decoding="async" /><span>BINUS</span></a>
+                <a class="sponsorship-logo" href="https://unjani.ac.id/" target="_blank" rel="noopener noreferrer" aria-label="Situs resmi Universitas Jenderal Achmad Yani"><img src="https://www.google.com/s2/favicons?domain=unjani.ac.id&amp;sz=128" alt="Logo UNJANI" loading="lazy" decoding="async" /><span>UNJANI</span></a>
+                <a class="sponsorship-logo" href="https://telkomuniversity.ac.id/" target="_blank" rel="noopener noreferrer" aria-label="Situs resmi Telkom University"><img src="https://www.google.com/s2/favicons?domain=telkomuniversity.ac.id&amp;sz=128" alt="Logo Telkom University" loading="lazy" decoding="async" /><span>Telkom University</span></a>
+              </div>
+            </article>
+          </div>
+          <section class="sponsorship-support panel-card">
+            <div>
+              <p class="eyebrow">BENTUK DUKUNGAN</p>
+              <h3>Kontribusi yang dapat dikolaborasikan</h3>
+            </div>
+            <div class="support-type-list"><span>Pendanaan program</span><span>Voucher data &amp; belanja</span><span>Merchandise IDTC</span><span>Lisensi dan perangkat</span><span>Mentor &amp; pelatihan</span><span>Studi kasus &amp; data</span></div>
+            <p>Rincian proposal, kontak resmi, serta mekanisme sponsorship perlu ditetapkan oleh pengelola IDTC sebelum publikasi dan aktivasi program.</p>
+          </section>
+        </section>
+
+        <section id="screen-character" class="screen">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">IDENTITAS PEMAIN</p>
+              <h3>Atur profil dan karakter</h3>
+            </div>
+          </div>
+          <div class="character-profile-settings">
+            <div class="panel-card character-profile-preview">
+              <p class="eyebrow">PREVIEW PROFIL</p>
+              <div class="avatar-halo big" id="characterAvatarPreview" aria-label="Preview avatar karakter"></div>
+              <h3 id="characterPreviewName">Adit Twin</h3>
+              <p id="characterPreviewBackground">BIM / Arsitektur</p>
+              <span class="badge soft" id="characterPreviewRecommendation">Rekomendasi: Engineer Twini</span>
+            </div>
+            <form class="panel-card character-profile-form" id="characterProfileForm">
+              <label for="playerNameInput">Nama profil</label>
+              <input id="playerNameInput" name="playerName" type="text" maxlength="24" autocomplete="nickname" required />
+              <label for="playerBackgroundInput">Pendidikan atau keahlian</label>
+              <select id="playerBackgroundInput" name="playerBackground">
+                <option value="bim">BIM / Arsitektur</option>
+                <option value="civil">Teknik Sipil / Konstruksi</option>
+                <option value="survey">Survey / Geospasial</option>
+                <option value="iot">IoT / Data / AI</option>
+                <option value="urban">Tata Kota / Perencanaan</option>
+              </select>
+              <p class="character-profile-hint">Pilihan latar menentukan spesialisasi profil dan rekomendasi avatar.</p>
+              <button class="primary-btn" type="submit">Simpan profil</button>
+            </form>
+          </div>
+          <div class="character-avatar-section">
+            <div class="panel-title-row">
+              <div>
+                <p class="eyebrow">AVATAR KARAKTER</p>
+                <h3>Pilih avatar kamu</h3>
+              </div>
+            </div>
+          <div class="character-grid" id="characterGrid"></div>
+          </div>
+        </section>
+
+        <section id="screen-world" class="screen active">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">WORLD MAP</p>
+              <h3>Digital Twin City Atlas</h3>
+            </div>
+          </div>
+          <div class="story-brief" id="zoneStoryBrief"></div>
+          <div class="indonesia-map-card">
+            <div class="map-frame-glow"></div>
+            <div class="panel-title-row map-header">
+              <div class="map-title-wrap">
+                <p class="eyebrow">TWINI CITY INTEL</p>
+                <h3>Satu Data Indonesia</h3>
+              </div>
+              <div class="map-heading-actions">
+                <span class="badge soft" id="cityLocationCount">10 lokasi</span>
+                <a class="map-source-link" href="https://tanahair.indonesia.go.id/" target="_blank" rel="noopener noreferrer">Tanah Air ↗</a>
+              </div>
+            </div>
+            <div class="indonesia-map" id="indonesiaMap">
+            </div>
+            <div class="map-status" id="mapStatus" hidden aria-live="polite"></div>
+            <button type="button" id="mapHomeFab" class="map-home-fab" title="Kembali ke Beranda" aria-label="Kembali ke Beranda">🏠</button>
+          </div>
+          <div class="zone-grid" id="zoneGrid"></div>
+        </section>
+
+        <section id="screen-missions" class="screen">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">MISSION SYSTEM</p>
+              <h3 id="missionCampaignTitle">Current campaign</h3>
+            </div>
+          </div>
+          <div class="mission-layout">
+            <div class="mission-sidebar" id="missionList"></div>
+            <div class="mission-detail" id="missionDetail"></div>
+          </div>
+        </section>
+
+        <section id="screen-bim" class="screen">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">BIM DISTRICT</p>
+              <h3>Smart building assembly puzzle</h3>
+            </div>
+          </div>
+
+          <div class="bim-layout">
+            <div class="panel-card">
+              <h3>Choose element</h3>
+              <div class="chip-row" id="bimOptions"></div>
+            </div>
+
+            <div class="panel-card large-panel">
+              <h3>3D model preview</h3>
+              <div class="building-canvas" id="bimViewerScene" aria-label="Navigable BIM isometric model">
+                <div class="bim-scene-topline">STRUCTURAL TWIN <span>ISOMETRIC</span></div>
+                <button type="button" id="bimResetView" class="bim-reset-view" title="Reset view" aria-label="Reset view">↺</button>
+                <div id="bimElementCaption" class="bim-element-caption">Model BIM siap</div>
+              </div>
+            </div>
+          </div>
+          <div class="panel-card margin-top">
+            <div class="panel-title-row">
+              <h3>Clash detection panel</h3>
+              <button class="tiny-btn" id="checkBimBtn">Validate</button>
+            </div>
+            <div id="bimStatus" class="status-box warn">Pipa menabrak beam. Twini: “Eits! Pipa ini nembus beton! 😭”</div>
+          </div>
+        </section>
+
+        <section id="screen-clash" class="screen">
+          <div class="section-head clash-section-head">
+            <div>
+              <p class="eyebrow">BIM INCIDENT ROOM · SECTOR 04</p>
+              <h3>Telusuri bukti. Temukan benturan.</h3>
+            </div>
+            <div class="clash-session-hud">
+              <div class="clash-session-stat clash-timer-stat"><span>WAKTU</span><strong id="clashTimer">01:00</strong></div>
+              <div class="clash-session-stat"><span>TERPERIKSA</span><strong id="clashProgress">0 / 5</strong></div>
+              <div class="clash-session-stat"><span>COMBO</span><strong id="clashStreak">0</strong></div>
+              <button class="clash-start-button" id="startClashHunt" type="button">Mulai investigasi</button>
+            </div>
+          </div>
+          <div class="clash-mission-strip">
+            <div><span class="clash-live-indicator"></span><strong id="clashSessionStatus">MODEL REV 08 · MENUNGGU PEMINDAIAN</strong></div>
+            <span class="clash-score-label">SKOR <strong id="clashScore">0000</strong></span>
+          </div>
+          <div class="clash-grid" id="clashGrid"></div>
+        </section>
+
+        <section id="screen-scanner" class="screen">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">DIGITAL SCANNER</p>
+              <h3>Match real condition vs BIM model</h3>
+            </div>
+          </div>
+          <div class="scanner-layout">
+            <div class="panel-card">
+              <h3>Real condition</h3>
+              <ul class="scan-list" id="realConditionList"></ul>
+            </div>
+            <div class="panel-card">
+              <h3>BIM model</h3>
+              <ul class="scan-list" id="bimConditionList"></ul>
+            </div>
+          </div>
+        </section>
+
+        <section id="screen-sensor" class="screen">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">SENSOR DETECTIVE</p>
+              <h3>Simulasi Digital Twin</h3>
+            </div>
+            <span class="badge soft" id="sensorPhaseLabel">LIVE MODEL</span>
+          </div>
+          <section class="sensor-catalog" aria-labelledby="sensorCatalogTitle">
+            <div class="sensor-catalog-heading">
+              <div>
+                <p class="eyebrow">REFERENSI INSTRUMENTASI</p>
+                <h3 id="sensorCatalogTitle">Sensor untuk Digital Twin</h3>
+              </div>
+              <span class="badge soft">BERDASARKAN PENGGUNAAN</span>
+            </div>
+            <p class="sensor-catalog-note">Contoh merek yang umum dijumpai di proyek industri dan infrastruktur; bukan endorsement. Pilih sensor berdasarkan rentang ukur, akurasi, lingkungan, protokol, dan kebutuhan kalibrasi.</p>
+            <div class="sensor-category-list" id="sensorCatalog"></div>
+          </section>
+          <div class="sensor-dashboard" id="sensorDashboard"></div>
+        </section>
+
+        <section id="screen-emergency" class="screen">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">EMERGENCY MODE</p>
+              <h3>HVAC failure in Smart Hospital</h3>
+            </div>
+            <div class="countdown danger">03:00</div>
+          </div>
+          <div class="emergency-layout">
+            <div class="panel-card">
+              <h3>Incident</h3>
+              <div class="alert-box">🚨 Patient Room Too Hot</div>
+              <ul class="task-list compact">
+                <li>Find the location</li>
+                <li>Read sensor</li>
+                <li>Check asset</li>
+                <li>Choose action</li>
+              </ul>
+            </div>
+            <div class="panel-card">
+              <h3>Response</h3>
+              <div class="action-list" id="emergencyActions"></div>
+            </div>
+          </div>
+        </section>
+
+        <section id="screen-build" class="screen">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">MASTERPLAN KOTA · SEKTOR 01</p>
+              <h3>Rancang hunian, kantor, dan mobilitas kota</h3>
+            </div>
+          </div>
+          <div class="build-layout">
+            <div class="panel-card build-tool-panel">
+              <div class="build-panel-heading">
+                <div>
+                  <p class="eyebrow">DESAIN KAWASAN</p>
+                  <h3>Bangunan & fasilitas</h3>
+                </div>
+                <span class="build-tool-count" id="buildToolCount">0 tools</span>
+              </div>
+              <div class="build-categories" id="buildCategories" role="tablist" aria-label="Kategori bangunan dan area"></div>
+              <div class="build-options" id="buildOptions" aria-label="Pilihan bangunan dan fasilitas"></div>
+              <div class="build-selection" id="buildSelection" aria-live="polite"></div>
+            </div>
+            <div class="panel-card large-panel build-map-panel">
+              <div class="build-map-heading">
+                <div>
+                  <p class="eyebrow" id="buildMapEyebrow">LEVEL 01 · PETA PEMBANGUNAN</p>
+                  <h3 id="buildMapTitle">Kampung Hijau</h3>
+                  <p class="build-level-focus" id="buildLevelFocus">Hunian lokal · taman · waterfront</p>
+                </div>
+                <div class="build-map-stats"><strong id="buildPlacedCount">0</strong><span>elemen dibangun</span></div>
+              </div>
+              <div class="build-level-bar">
+                <div class="build-level-bar-label"><span>PILIH LEVEL KOTA</span><strong id="buildLevelArea">24 ha · 30 petak</strong></div>
+                <div class="build-level-selector" id="buildLevelSelector" role="tablist" aria-label="Level kota"></div>
+              </div>
+              <div class="build-map-viewport">
+                <div class="site-map-label site-map-label--north">N <span>↑</span></div>
+                <div class="site-grid" id="siteGrid" aria-label="Construction site map"></div>
+                <span class="site-map-label site-map-label--east">RIVERWALK</span>
+                <span class="site-map-label site-map-label--south">ACCESS ROAD · 01</span>
+              </div>
+              <div class="build-map-footer">
+                <div class="build-legend"><span><i class="legend-swatch legend-swatch--road"></i>Jalan</span><span><i class="legend-swatch legend-swatch--green"></i>Taman</span><span><i class="legend-swatch legend-swatch--water"></i>Air</span><span><i class="legend-swatch legend-swatch--work"></i>Zona bangun</span><span><i class="legend-swatch legend-swatch--spot"></i>Spot kota</span><span><i class="legend-swatch legend-swatch--hazard"></i>Bahaya</span></div>
+                <button class="build-clear-button" id="clearBuildSite" type="button">Bersihkan peta</button>
+              </div>
+              <div class="build-analysis-actions">
+                <div><strong>Evaluasi masterplan</strong><span>Periksa dampak rancangan sebelum diterapkan.</span></div>
+                <button class="build-analysis-button" id="analyzeCityDesign" type="button">Analisis desain</button>
+              </div>
+              <section class="city-analysis-panel" id="cityAnalysisPanel" aria-labelledby="cityAnalysisTitle" aria-live="polite" hidden>
+                <div class="city-analysis-heading">
+                  <div>
+                    <p class="eyebrow">HASIL SIMULASI KOTA</p>
+                    <h4 id="cityAnalysisTitle">Nilai masterplan</h4>
+                  </div>
+                  <div class="city-value-score"><strong id="cityAnalysisScore">0</strong><span>/ 100</span><small id="cityAnalysisGrade">Perlu dikembangkan</small></div>
+                </div>
+                <div class="city-value-track"><span id="cityAnalysisScoreBar"></span></div>
+                <div class="city-analysis-metrics" id="cityAnalysisMetrics"></div>
+                <div class="city-analysis-findings">
+                  <section><h5>Tata ruang</h5><p id="cityAnalysisSpatial"></p></section>
+                  <section><h5>Aksesibilitas</h5><p id="cityAnalysisAccess"></p></section>
+                  <section><h5>Dampak lingkungan</h5><p id="cityAnalysisEnvironment"></p></section>
+                  <section><h5>Risiko &amp; keselamatan</h5><p id="cityAnalysisRisk"></p></section>
+                </div>
+                <div class="city-analysis-recommendations">
+                  <div><p class="eyebrow">LANGKAH PENINGKATAN NILAI KOTA</p><h5>Rekomendasi sistem &amp; IoT</h5></div>
+                  <div id="cityAnalysisRecommendations"></div>
+                </div>
+                <p class="city-analysis-disclaimer">Skor adalah estimasi perencanaan dari layout simulasi, bukan pengganti kajian teknis lapangan.</p>
+              </section>
+            </div>
+          </div>
+        </section>
+
+        <section id="screen-ai" class="screen">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">AI MISSION</p>
+              <h3>Predictive maintenance investigation</h3>
+            </div>
+          </div>
+          <div class="panel-card">
+            <div id="aiPumpBoard" class="pump-grid"></div>
+          </div>
+        </section>
+
+        <section id="screen-inventory" class="screen">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">INVENTORY</p>
+              <h3>Collectibles and equipment</h3>
+            </div>
+          </div>
+          <div class="inventory-grid" id="inventoryGrid"></div>
+        </section>
+
+        <section id="screen-customization" class="screen">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">TWINI SKIN</p>
+              <h3>Customize your robot companion</h3>
+            </div>
+          </div>
+          <div class="skin-grid" id="skinGrid"></div>
+        </section>
+
+        <section id="screen-achievements" class="screen">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">ACHIEVEMENT</p>
+              <h3>Milestones and badges</h3>
+            </div>
+          </div>
+          <div class="achievement-grid" id="achievementGrid"></div>
+        </section>
+
+        <section id="screen-leaderboard" class="screen">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">LEADERBOARD</p>
+              <h3>Global rankings</h3>
+            </div>
+          </div>
+          <div class="leaderboard-list" id="leaderboardList"></div>
+        </section>
+
+        <section id="screen-guild" class="screen">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">GUILD SYSTEM</p>
+              <h3>Create your team</h3>
+            </div>
+          </div>
+          <div class="guild-grid" id="guildGrid"></div>
+        </section>
+
+        <section id="screen-profile" class="screen">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">PLAYER PROFILE</p>
+              <h3>Engineer overview</h3>
+            </div>
+          </div>
+          <div class="profile-layout">
+            <div class="panel-card profile-card">
+              <div class="avatar-halo big profile-avatar-frame" id="profileAvatar"><img src="mobile/assets/images/ITDC_icon.ico" alt="Engineer Twini" /></div>
+              <p class="profile-achievement-caption">ORNAMEN PENCAPAIAN</p>
+              <div id="profileAchievementOrnaments" class="profile-achievement-ornaments" aria-label="Lencana pencapaian profil"></div>
+              <h3 id="profileName">Adit Twin</h3>
+              <p id="profileRole">Twin Engineer</p>
+              <div class="profile-cosmetic-labels">
+                <div id="profileEquippedBadges" class="profile-equipped-badge-list" aria-label="Lencana profil yang terpasang"></div>
+                <span id="profileEquippedBadgeCount">0 / 7 lencana</span>
+                <span id="profileEquippedAccessory">Aksesori: tanpa aksesori</span>
+              </div>
+              <div class="profile-stats">
+                <span>Level 25</span>
+                <span>XP 12,600</span>
+                <span>Accuracy 86%</span>
+              </div>
+            </div>
+            <div class="panel-card">
+              <h3>Player metadata</h3>
+              <ul class="task-list compact">
+                <li>Spesialisasi: <span id="profileBackground">BIM / Arsitektur</span></li>
+                <li>Badge: <span id="profileBadge">BIM &amp; Desain Bangunan</span></li>
+                <li>Buildings: 18</li>
+                <li>Equipment: 31</li>
+                <li>Guild: BIM Warriors</li>
+                <li>Mission Progress: 72%</li>
+              </ul>
+            </div>
+          </div>
+          <section class="profile-avatar-customization" aria-labelledby="profileAvatarTitle">
+            <div class="panel-title-row">
+              <div>
+                <p class="eyebrow">AVATAR PROFIL</p>
+                <h3 id="profileAvatarTitle">Pilih karakter avatar</h3>
+              </div>
+              <span class="badge soft">20 KARAKTER</span>
+            </div>
+            <p class="profile-cosmetic-copy">Pilih karakter yang mewakili peranmu di ekosistem Digital Twin.</p>
+            <div class="profile-photo-picker">
+              <div class="profile-photo-preview" id="profilePhotoPreview" aria-hidden="true">📷</div>
+              <div class="profile-photo-picker-copy">
+                <strong>Gunakan foto pribadi</strong>
+                <span>JPG, PNG, atau WebP · maksimal 8 MB</span>
+                <div class="profile-photo-actions">
+                  <label class="profile-photo-upload" for="profilePhotoInput">Pilih foto
+                    <input id="profilePhotoInput" type="file" accept="image/jpeg,image/png,image/webp" />
+                  </label>
+                  <button class="profile-photo-remove" id="removeProfilePhoto" type="button" hidden>Hapus foto</button>
+                </div>
+              </div>
+            </div>
+            <div class="profile-avatar-grid" id="profileAvatarGallery"></div>
+            <p class="settings-save-status" id="profileAvatarStatus" role="status" aria-live="polite"></p>
+          </section>
+          <section class="profile-cosmetic-store" aria-labelledby="profileCosmeticTitle">
+            <div class="panel-title-row">
+              <div>
+                <p class="eyebrow">TOKO PROFIL</p>
+                <h3 id="profileCosmeticTitle">Lencana &amp; aksesori</h3>
+              </div>
+              <span class="profile-coin-balance">💰 <strong id="profileStoreCoins">2.480</strong> koin</span>
+            </div>
+            <p class="profile-cosmetic-copy">Beli satu kali dengan koin, lalu pasang atau ganti kapan saja.</p>
+            <div class="profile-cosmetic-filters" role="group" aria-label="Filter item profil">
+              <button class="cosmetic-filter active" type="button" data-cosmetic-filter="all" aria-pressed="true">Semua <span id="profileCosmeticCount">53</span></button>
+              <button class="cosmetic-filter" type="button" data-cosmetic-filter="badge" aria-pressed="false">Lencana <span>50</span></button>
+              <button class="cosmetic-filter" type="button" data-cosmetic-filter="accessory" aria-pressed="false">Aksesori <span>3</span></button>
+            </div>
+            <div class="profile-cosmetic-grid" id="profileCosmeticStore"></div>
+            <p class="settings-save-status" id="profileCosmeticStatus" role="status" aria-live="polite"></p>
+          </section>
+        </section>
+
+        <section id="screen-maturity" class="screen">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">DIGITAL TWIN MATURITY</p>
+              <h3>Progression path</h3>
+            </div>
+          </div>
+          <div class="maturity-grid" id="maturityGrid"></div>
+          <div class="competency-grid" id="competencyGrid"></div>
+        </section>
+
+        <section id="screen-citybuilder" class="screen">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">CITY BUILDER</p>
+              <h3>Expand the Smart Twin City</h3>
+            </div>
+          </div>
+          <div class="city-builder-grid">
+            <div class="panel-card">
+              <h3>Construction progress</h3>
+              <div class="progress-stack">
+                <div><label>Foundation</label><div class="meter"><span style="width: 100%"></span></div></div>
+                <div><label>Structure</label><div class="meter"><span style="width: 75%"></span></div></div>
+                <div><label>Architecture</label><div class="meter"><span style="width: 42%"></span></div></div>
+                <div><label>MEP</label><div class="meter"><span style="width: 20%"></span></div></div>
+              </div>
+            </div>
+            <div class="panel-card">
+              <div class="panel-title-row"><h3>City footprint</h3><span class="badge soft">EVOLVING</span></div>
+              <div class="city-grid-mini">
+                <div class="city-cell city-blue"></div>
+                <div class="city-cell city-cyan"></div>
+                <div class="city-cell city-gold"></div>
+                <div class="city-cell city-green"></div>
+                <div class="city-cell city-blue"></div>
+                <div class="city-cell city-cyan"></div>
+                <div class="city-cell city-gold"></div>
+                <div class="city-cell city-green"></div>
+              </div>
+            </div>
+          </div>
+          <div class="city-metrics" id="cityMetrics"></div>
+        </section>
+      </main>
+    </div>
+
+    <aside class="sponsor-ad" id="sponsorAd" aria-label="Iklan Sponsorship IDTC" aria-live="polite" aria-hidden="true" hidden>
+      <div class="sponsor-ad-header">
+        <p><span>IKLAN</span> · SPONSORSHIP IDTC</p>
+        <button class="sponsor-ad-close" id="sponsorAdClose" type="button" aria-label="Tutup iklan" title="Tutup iklan">×</button>
+      </div>
+      <div class="sponsor-ad-content">
+        <div class="sponsor-ad-logo"><img src="mobile/assets/images/ITDC_icon.png" alt="Logo IDTC" /></div>
+        <div class="sponsor-ad-copy"><h2 id="sponsorAdTitle">Dukung IDTC</h2><p id="sponsorAdMessage">Bantu kembangkan pembelajaran Digital Twin.</p></div>
+      </div>
+      <div class="sponsor-ad-footer">
+        <button class="sponsor-ad-action" id="sponsorAdAction" type="button" data-go="sponsorship">Info Sponsorship <span aria-hidden="true">↗</span></button>
+        <span>Program IDTC</span>
+      </div>
+      <div class="sponsor-ad-timer" aria-hidden="true"><span id="sponsorAdTimerBar"></span></div>
+    </aside>
+    <div class="sponsor-logo-floater" id="sponsorLogoFloater" aria-hidden="true"></div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script type="module" src="bim-viewer.js"></script>
+    <script src="unity-webgl.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
